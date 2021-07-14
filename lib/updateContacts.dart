@@ -201,6 +201,7 @@ class _UpdateContactPageState extends State<UpdateContactPage>{
                                           child: TextFormField(
                                             controller: numbersEditController[index],
                                             decoration: InputDecoration(
+                                              prefixIcon: Icon(Icons.phone, color: Colors.black),
                                               hintText: snapshot.data!.phoneNumbers[index].toString(),
                                               border: OutlineInputBorder(),
                                             ),
@@ -231,6 +232,7 @@ class _UpdateContactPageState extends State<UpdateContactPage>{
                                         child: TextFormField(
                                           controller: numbersEditController[index],
                                           decoration: InputDecoration(
+                                            prefixIcon: Icon(Icons.phone, color: Colors.black),
                                             hintText: "0",
                                             border: OutlineInputBorder(),
                                           ),

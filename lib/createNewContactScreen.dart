@@ -196,6 +196,7 @@ class _NewContactState extends State<NewContact> {
                             child: TextFormField(
                               controller: numberController[index],
                               decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.phone, color: Colors.black),
                                 labelText: "Phone number #${index + 1}:",
                                 hintText: "0",
                                 border: OutlineInputBorder(),
