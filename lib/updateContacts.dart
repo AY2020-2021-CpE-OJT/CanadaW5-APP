@@ -171,6 +171,7 @@ class _UpdateContactPageState extends State<UpdateContactPage>{
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.done,
                       ),
+                      SizedBox(height: 8),
                       Row(
                         children: [
                           Text("Phone numbers: ", style: TextStyle(fontSize: 20),),
