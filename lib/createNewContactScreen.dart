@@ -34,7 +34,7 @@ class _NewContactState extends State<NewContact> {
   final formKey = GlobalKey<FormState>();
   final fnController = TextEditingController();
   final lnController = TextEditingController();
-  List<TextEditingController> numberController = <TextEditingController>[TextEditingController()];
+  List<TextEditingController> numberController = [];
   late Future<ContactModel?> _dataModel;
 
   @override
@@ -47,13 +47,14 @@ class _NewContactState extends State<NewContact> {
   //Control multiple phone numbers
   void addNumberField() {
     setState(() {
-      numberController.insert(0, TextEditingController()); //add data
+      numberController.insert(numbersFieldCount, TextEditingController()); //add data
       numbersFieldCount++; //increment
     });
   }
-  void deleteNumberField() {
+  void deleteNumberField(index) {
     setState(() {
       numbersFieldCount--;
+      numberController.removeAt(index);
     });
   }
 
@@ -171,7 +172,7 @@ class _NewContactState extends State<NewContact> {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: Text('Phone Numbers: ', style: TextStyle(fontSize: 16)),),
+                    child: Text(' Phone Numbers: ', style: TextStyle(fontSize: 16)),),
                   SizedBox(width: 60),
                   ButtonTheme(
                       minWidth: 50,
@@ -184,31 +185,34 @@ class _NewContactState extends State<NewContact> {
               Flexible(
                 child: ListView.builder(
                     itemCount: numbersFieldCount, itemBuilder: (context, index){
-                  return ListTile(
-                    title: Row(
+                   numberController.add(TextEditingController());
+                    return Row(
                       children: [
                         Flexible(
-                          flex: 15,
+                          flex: 10,
                           child:
-                          TextFormField(
-                            controller: numberController[index],
-                            decoration: InputDecoration(
-                              labelText: "Phone number #${index + 1}:",
-                              hintText: "0",
-                              border: OutlineInputBorder(),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: TextFormField(
+                              controller: numberController[index],
+                              decoration: InputDecoration(
+                                labelText: "Phone number #${index + 1}:",
+                                hintText: "0",
+                                border: OutlineInputBorder(),
+                              ),
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.done,
                             ),
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.done,
                           ),
                         ),
-                        Flexible(
-                          flex: 1,
-                          child: IconButton(
-                              onPressed: deleteNumberField, icon: const Icon(Icons.close), splashRadius: 2),
+                        IconButton(
+                            onPressed: (){
+                              deleteNumberField(index);
+                            },
+                            icon: const Icon(Icons.close), splashRadius: 2,
                         ),
                       ],
-                    ),
-                  );
+                    );
                 }),
               ),
             ],
