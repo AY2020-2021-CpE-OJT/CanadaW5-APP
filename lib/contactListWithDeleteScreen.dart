@@ -9,7 +9,7 @@ import 'contactModel.dart';
 import 'createNewContactScreen.dart';
 import 'updateContacts.dart';
 
-
+//delete Contact
 Future<ContactModel> deleteContactData(String id) async {
 
   final http.Response response = await http.delete(
@@ -26,6 +26,29 @@ Future<ContactModel> deleteContactData(String id) async {
     throw Exception('Failed to delete contact.');
   }
 }
+//get Contacts from DB
+Future getContactData() async{
+  final response = await http.get(Uri.http('phonebookappapicloud.herokuapp.com', 'contacts'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6Imd1ZXN0IiwiZW1haWwiOiJndWVzdEBnbWFpbC5jb20ifSwiaWF0IjoxNjI2NjczMDY4fQ.LcNRdqaL2B3MwDUhAO0bZwzMxz2MGsl3Bhf3_CSlw4g',
+      }
+  );
+  final jsonData = jsonDecode(response.body);
+  List<ContactModel> contactmodels = [];
+
+  for (var u in jsonData){
+    ContactModel data = ContactModel(phoneNumbers: u["phone_numbers"], id: u["_id"], lastName: u["last_name"], firstName: u["first_name"], v: u["__v"]);
+    contactmodels.add(data);
+  }
+
+  if(response.statusCode == 200){
+    print("Contact data taken from Database");
+    print("Total contacts: ${contactmodels.length} ");
+    return contactmodels;
+  }else{
+    print("Cannot get data");
+  }
+}
 
 class DataFromAPI extends StatefulWidget {
   @override
@@ -35,38 +58,14 @@ class DataFromAPI extends StatefulWidget {
 class _DataFromAPIState extends State<DataFromAPI> {
   List<Future<ContactModel>> futureContactData = <Future<ContactModel>>[];
   int contactsCount = 0;
-  late Future<ContactModel> _dataModel;
+  late Future _dataModel = getContactData();
 
   @override
   void initState(){
     super.initState();
     setState(() {
-      getContactData();
+      _dataModel = getContactData();
     });
-  }
-
-  //get Contacts from DB
-  Future getContactData() async{
-    final response = await http.get(Uri.http('phonebookappapicloud.herokuapp.com', 'contacts'),
-        headers: {
-          HttpHeaders.authorizationHeader: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6Imd1ZXN0IiwiZW1haWwiOiJndWVzdEBnbWFpbC5jb20ifSwiaWF0IjoxNjI2NjczMDY4fQ.LcNRdqaL2B3MwDUhAO0bZwzMxz2MGsl3Bhf3_CSlw4g',
-        }
-    );
-    final jsonData = jsonDecode(response.body);
-    List<ContactModel> contactmodels = [];
-
-    for (var u in jsonData){
-      ContactModel data = ContactModel(phoneNumbers: u["phone_numbers"], id: u["_id"], lastName: u["last_name"], firstName: u["first_name"], v: u["__v"]);
-      contactmodels.add(data);
-    }
-
-    if(response.statusCode == 200){
-      print("Contact data taken from Database");
-      print("Total contacts: ${contactmodels.length} ");
-      return contactmodels;
-    }else{
-      print("Cannot get data");
-    }
   }
 
   Widget phoneNumbersList(AsyncSnapshot<dynamic> snapshot,int index){
@@ -87,16 +86,15 @@ class _DataFromAPIState extends State<DataFromAPI> {
           TextButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewContact()));
-              //Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeleteContactAndRefreshScreen()));
             },
             child: Icon(Icons.person_add_alt, color: Colors.black),
           ),
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh, color: Colors.black),
             tooltip: 'Refresh list',
             onPressed: () {
               setState(() {
-                getContactData();
+                _dataModel = getContactData();
               });
             },
           ),
@@ -107,7 +105,7 @@ class _DataFromAPIState extends State<DataFromAPI> {
             padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: Container(
               child: FutureBuilder(
-                future: getContactData(),
+                future: _dataModel,
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
                   if(snapshot.data == null){
                     return Container(
@@ -123,8 +121,8 @@ class _DataFromAPIState extends State<DataFromAPI> {
                             key: Key(snapshot.data[index].id),
                             onDismissed: (direction) {
                               String contactName = (snapshot.data[index].firstName.toString() + ' ' + snapshot.data[index].lastName.toString());
-                              deleteContactData(snapshot.data[index].id);
                               setState(() {
+                                _dataModel = deleteContactData(snapshot.data[index].id);
                                 snapshot.data.removeAt(index);
                               });
                               // Then show a snackbar.
@@ -145,10 +143,10 @@ class _DataFromAPIState extends State<DataFromAPI> {
                                         child: const Text('Cancel')),
                                     TextButton(
                                         onPressed: (){
-                                          Navigator.of(context).pop(true);
                                           setState(() {
-                                            getContactData();
+                                            _dataModel = getContactData();
                                           });
+                                          Navigator.of(context).pop(true);
                                         },
                                         child: const Text('Delete'))
                                   ],

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'contactModel.dart';
@@ -266,7 +267,17 @@ class _UpdateContactPageState extends State<UpdateContactPage>{
                 );
               }
             }
-          return CircularProgressIndicator();
+          return Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(),
+                SizedBox(height: 20),
+                Text("Getting Contact Data")
+              ],
+            ),
+          );
           },
         )
       ),
