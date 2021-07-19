@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,12 @@ import 'updateContacts.dart';
 
 
 Future<ContactModel> deleteContactData(String id) async {
+
   final http.Response response = await http.delete(
     Uri.parse('https://phonebookappapicloud.herokuapp.com/contacts/delete/$id'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+      HttpHeaders.authorizationHeader: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6Imd1ZXN0IiwiZW1haWwiOiJndWVzdEBnbWFpbC5jb20ifSwiaWF0IjoxNjI2NjczMDY4fQ.LcNRdqaL2B3MwDUhAO0bZwzMxz2MGsl3Bhf3_CSlw4g',
     },
   );
 
@@ -44,7 +47,11 @@ class _DataFromAPIState extends State<DataFromAPI> {
 
   //get Contacts from DB
   Future getContactData() async{
-    final response = await http.get(Uri.http('phonebookappapicloud.herokuapp.com', 'contacts'));
+    final response = await http.get(Uri.http('phonebookappapicloud.herokuapp.com', 'contacts'),
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6Imd1ZXN0IiwiZW1haWwiOiJndWVzdEBnbWFpbC5jb20ifSwiaWF0IjoxNjI2NjczMDY4fQ.LcNRdqaL2B3MwDUhAO0bZwzMxz2MGsl3Bhf3_CSlw4g',
+        }
+    );
     final jsonData = jsonDecode(response.body);
     List<ContactModel> contactmodels = [];
 
@@ -128,8 +135,8 @@ class _DataFromAPIState extends State<DataFromAPI> {
                             confirmDismiss: (DismissDirection direction) async{
                               return await showDialog(context: context, builder: (context) {
                                 return AlertDialog(
-                                  title: const Text("Delete?"),
-                                  //content: const Text('Delete contact?'),
+                                  title: const Text("Are you sure?"),
+                                  content: const Text('Do you really want to delete this contact? This process cannot be undone.'),
                                   actions: [
                                     TextButton(
                                         onPressed: () {

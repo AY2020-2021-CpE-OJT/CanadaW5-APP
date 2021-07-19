@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'contactModel.dart';
@@ -9,6 +10,7 @@ Future<ContactModel?> updateContact(List<dynamic> phone_numbers, String id, Stri
     Uri.parse('https://phonebookappapicloud.herokuapp.com/contacts/update/$id'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+      HttpHeaders.authorizationHeader: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6Imd1ZXN0IiwiZW1haWwiOiJndWVzdEBnbWFpbC5jb20ifSwiaWF0IjoxNjI2NjczMDY4fQ.LcNRdqaL2B3MwDUhAO0bZwzMxz2MGsl3Bhf3_CSlw4g',
     },
       body: jsonEncode(<dynamic, dynamic>
       {"last_name": last_name, "first_name": first_name, "phone_numbers": phone_numbers}));
@@ -21,7 +23,10 @@ Future<ContactModel?> updateContact(List<dynamic> phone_numbers, String id, Stri
 }
 
 Future<ContactModel?> getSpecificContact(String id) async{
-  final response = await http.get(Uri.parse('https://phonebookappapicloud.herokuapp.com/contacts/find/' + id));
+  final response = await http.get(Uri.parse('https://phonebookappapicloud.herokuapp.com/contacts/find/' + id),
+  headers: {
+    HttpHeaders.authorizationHeader: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6Imd1ZXN0IiwiZW1haWwiOiJndWVzdEBnbWFpbC5jb20ifSwiaWF0IjoxNjI2NjczMDY4fQ.LcNRdqaL2B3MwDUhAO0bZwzMxz2MGsl3Bhf3_CSlw4g',
+  });
   final jsonData = jsonDecode(response.body);
 
   if(response.statusCode == 200){
