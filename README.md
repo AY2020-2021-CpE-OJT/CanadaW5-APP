@@ -4,10 +4,13 @@ A  Flutter application project that uses a REST API (made using Node.js, Express
 
 
 ## Updates - Task 005 
-Updated App by adding Headers to deliver tokens for API access (Allowing application to access all routes).
-Modified delete popup UI.
-Fixed errors upon deletion of contact.
-Tried to implement a contact display screen and adding the edit and delete buttons (placed in experimental and will need more time to fix due to errors and pixel glitches).
+>Updated App by adding Headers to deliver tokens for API access (Allowing application to access all routes).
+
+>Modified delete popup UI.
+
+>Fixed errors upon deletion of contact.
+
+>Tried to implement a contact display screen and adding the edit and delete buttons (placed in experimental and will need more time to fix due to errors and pixel glitches).
 
 
 ## Getting Started
