@@ -63,9 +63,6 @@ class _DataFromAPIState extends State<DataFromAPI> {
   @override
   void initState(){
     super.initState();
-    setState(() {
-      _dataModel = getContactData();
-    });
   }
 
   Widget phoneNumbersList(AsyncSnapshot<dynamic> snapshot,int index){
@@ -105,7 +102,7 @@ class _DataFromAPIState extends State<DataFromAPI> {
             padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: Container(
               child: FutureBuilder(
-                future: _dataModel,
+                future: _dataModel = getContactData(),
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
                   if(snapshot.data == null){
                     return Container(
@@ -134,7 +131,8 @@ class _DataFromAPIState extends State<DataFromAPI> {
                               return await showDialog(context: context, builder: (context) {
                                 return AlertDialog(
                                   title: const Text("Are you sure?"),
-                                  content: const Text('Do you really want to delete this contact? This process cannot be undone.'),
+                                  content: const Text('Do you really want to delete this contact? This process cannot be undone.',
+                                    style: TextStyle(fontSize: 14),),
                                   actions: [
                                     TextButton(
                                         onPressed: () {
@@ -142,13 +140,16 @@ class _DataFromAPIState extends State<DataFromAPI> {
                                         },
                                         child: const Text('Cancel')),
                                     TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                        ),
                                         onPressed: (){
                                           setState(() {
                                             _dataModel = getContactData();
                                           });
                                           Navigator.of(context).pop(true);
                                         },
-                                        child: const Text('Delete'))
+                                        child: const Text('Delete', style: TextStyle(color: Colors.white),))
                                   ],
                                 );
                               });
@@ -159,7 +160,7 @@ class _DataFromAPIState extends State<DataFromAPI> {
                               color: Colors.red,
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
-                                child: Icon(Icons.delete,
+                                child: Icon(Icons.delete_forever_sharp,
                                   color: Colors.white,
                                 ),
                               ),
@@ -180,7 +181,7 @@ class _DataFromAPIState extends State<DataFromAPI> {
                                           CircleAvatar(
                                             backgroundColor: Colors.primaries[Random().nextInt(Colors.primaries.length)],
                                             radius: 30.0,
-                                            child: Text(snapshot.data[index].firstName[0] + snapshot.data[index].lastName[0],
+                                            child: Text(snapshot.data[index].firstName[0].toUpperCase() + snapshot.data[index].lastName[0].toUpperCase(),
                                                 style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold)),
                                           ),
                                           SizedBox(width: 18.0),

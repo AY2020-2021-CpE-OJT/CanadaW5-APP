@@ -27,7 +27,7 @@ Future<ContactModel?> passData(String last_name, String first_name, List<dynamic
   if(response.statusCode == 201){
     return ContactModel.fromJson(jsonDecode(response.body));
   }else {
-    print("Cannot save");
+    //print("Cannot save");
   }
 }
 
