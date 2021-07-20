@@ -1,19 +1,13 @@
-## Phonebook Application
+## Phonebook Application 
 
-A  Flutter application project that uses a REST API (made using Node.js, Express and Mongoose Library, MongoDB for its database and then cloud integrated to Heroku).
+A  Flutter application project that uses a REST API (made using Node.js, Express and Mongoose Library, MongoDB for its database and then cloud integrated to Heroku) and secured by using JWT.
 
 
-## Flow and Screenshots
-Task 004 - Cloud Integration and modification of Application to delete and update a contact / contacts.
-
-![Screen 1 Contacts List](https://user-images.githubusercontent.com/85911660/125630080-d2893b32-52e6-4254-9f69-11aa37c7399b.png)
-Swipe Left to Delete
-![Swipe-left-to-delete](https://user-images.githubusercontent.com/85911660/125630188-50627fcc-69c8-4b12-9032-9593c343269f.png)
-![confirmation](https://user-images.githubusercontent.com/85911660/125630254-b7199882-4ca1-48af-9492-898e99326f22.png)
-Add Contact
-![Create New Contact](https://user-images.githubusercontent.com/85911660/125630147-729556c8-320d-489a-8583-a8a23d57f217.png)
-Tapping/Clicking on a contact moves to the Edit/Update Contact Screen
-![Update Contact upon click or tap](https://user-images.githubusercontent.com/85911660/125630315-beeb5d51-780c-4adc-87d3-d8e649487a88.png)
+## Updates - Task 005 
+Updated App by adding Headers to deliver tokens for API access (Allowing application to access all routes).
+Modified delete popup UI.
+Fixed errors upon deletion of contact.
+Tried to implement a contact display screen and adding the edit and delete buttons (placed in experimental and will need more time to fix due to errors and pixel glitches).
 
 
 ## Getting Started
